@@ -18,6 +18,7 @@ import {
   Award,
 } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
+import Link from "next/link"
 
 // Types
 interface Slide {
@@ -168,9 +169,9 @@ const Hero = () => {
   const currentSlideData = slides[currentSlide]
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden ">
       {/* Hero Section */}
-      <section className="relative min-h-screen overflow-hidden bg-black">
+      <section className="relative min-h-screen overflow-hidden bg-black pt-6">
         {/* Background Video with Parallax */}
         <div className="absolute inset-0">
           <video
@@ -270,13 +271,16 @@ const Hero = () => {
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Button>
-                <Button
-                  variant="outline"
-                  className="group bg-transparent border-2 border-white/30 text-white px-10 py-5 text-lg font-semibold rounded-full hover:bg-white/10 hover:scale-105 transition-all duration-300"
-                >
-                  <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                  Watch Demo
-                </Button>
+                <Link href="https://www.youtube.com/@payzonindiadigitalsolutions">
+                  <Button
+                    variant="outline"
+                    className="group bg-transparent border-2 border-white/30 text-white px-10 py-5 text-lg font-semibold rounded-full hover:bg-white/10 hover:scale-105 transition-all duration-300"
+                  >
+                    <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                    Watch Demo
+                  </Button>
+                </Link>
+
               </div>
             </div>
           </div>
@@ -302,8 +306,8 @@ const Hero = () => {
                 onClick={() => handleDotClick(index)}
                 disabled={isAnimating}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
-                    ? 'bg-white scale-125'
-                    : 'bg-white/40 hover:bg-white/60'
+                  ? 'bg-white scale-125'
+                  : 'bg-white/40 hover:bg-white/60'
                   }`}
               />
             ))}

@@ -1,4 +1,4 @@
-import { Facebook, Youtube, Linkedin, Instagram } from "lucide-react"
+import { Facebook, Youtube, Linkedin, Instagram, Twitter } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -18,10 +18,11 @@ export default function Footer() {
               challenges.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="w-5 h-5 text-gray-400 hover:text-blue-600 cursor-pointer transition-colors" />
-              <Youtube className="w-5 h-5 text-gray-400 hover:text-red-600 cursor-pointer transition-colors" />
-              <Linkedin className="w-5 h-5 text-gray-400 hover:text-blue-600 cursor-pointer transition-colors" />
-              <Instagram className="w-5 h-5 text-gray-400 hover:text-pink-600 cursor-pointer transition-colors" />
+              <Facebook href="https://www.facebook.com/PAYZONINDIA/" className="w-5 h-5 text-gray-400 hover:text-blue-600 cursor-pointer transition-colors" />
+              <Youtube href="https://www.youtube.com/channel/UCSjsk1O7zYurXPDl2o3RuIA" className="w-5 h-5 text-gray-400 hover:text-red-600 cursor-pointer transition-colors" />
+              <Linkedin href="https://www.linkedin.com/company/payzonindiabhopal/posts/?feedView=all" className="w-5 h-5 text-gray-400 hover:text-blue-600 cursor-pointer transition-colors" />
+              <Instagram href="https://www.instagram.com/thepayzonindia/" className="w-5 h-5 text-gray-400 hover:text-pink-600 cursor-pointer transition-colors" />
+            <Twitter href="https://x.com/payzonindia" className="w-5 h-5 text-gray-400 hover:text-blue-600 cursor-pointer transition-colors"/>
             </div>
           </div>
 

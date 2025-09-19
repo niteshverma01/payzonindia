@@ -3,244 +3,207 @@
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
+// Define types for awards data
+interface Award {
+  id: number
+  image: string
+  title: string
+  link: string
+}
+
 export default function AwardsAchievements() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [isAutoPlay, setIsAutoPlay] = useState(true)
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true)
+  const [dragStartX, setDragStartX] = useState<number>(0)
+  const [dragEndX, setDragEndX] = useState<number>(0)
 
   // Awards data
-  const awards = [
+  const awards: Award[] = [
     {
       id: 1,
-      image: "/award-mobile-games.png",
-      title: "Mobile Games Award Winner",
-      category: "Rising Stars",
-      bgColor: "bg-purple-600"
+      image: "/images/payzonit.png",
+      title: "Web Development & Solutions",
+      link: "www.payzonitservices.com",
     },
     {
       id: 2,
-      image: "/award-market-leaders.png", 
-      title: "Market Leaders Award",
-      category: "Excellence in Innovation",
-      bgColor: "bg-orange-500"
+      image: "/images/PAYZONINDIA-pngLogo.png",
+      title: "Digital Marketing Services",
+      link: "www.payzonmarketing.com",
     },
     {
       id: 3,
-      image: "/award-clutch-2018.png",
-      title: "Clutch Web Developers 2018",
-      category: "Top Development Company",
-      bgColor: "bg-gray-700"
+      image: "/images/logo.png",
+      title: "Fintech & API Solutions",
+      link: "www.payzonapi.com",
     },
     {
       id: 4,
-      image: "/award-mobile-app-developers.png",
-      title: "Top Mobile App Developers",
-      category: "Excellence Award",
-      bgColor: "bg-yellow-500"
+      image: "/images/shoppy-logo.png",
+      title: "E-commerce & Online Stores",
+      link: "www.payzonshoppy.com",
     },
     {
       id: 5,
-      image: "/award-ai-stats.png",
-      title: "Top AI Statistics Award",
-      category: "Artificial Intelligence",
-      bgColor: "bg-red-600"
+      image: "/images/Sadaiv MEDIA 1.png",
+      title: "News & Media Services",
+      link: "www.sadaivsatya.com",
     },
     {
       id: 6,
-      image: "/award-tech-innovator.png",
-      title: "Tech Innovator Award",
-      category: "Innovation Excellence",
-      bgColor: "bg-blue-600"
-    }
+      image: "/images/Sadaiv_logo.png",
+      title: "Non-Profit & Charity Foundation",
+      link: "www.sadaivyuvafoundation.com",
+    },
   ]
 
-  // Calculate visible slides (show 5 at a time)
-  const slidesPerView = 5
+  // Responsive slides per view
+  const getSlidesPerView = () => {
+    if (typeof window === "undefined") return 3 // Default for SSR
+    if (window.innerWidth < 640) return 1 // Mobile
+    if (window.innerWidth < 1024) return 2 // Tablet
+    return 3 // Desktop
+  }
+
+  const [slidesPerView, setSlidesPerView] = useState<number>(getSlidesPerView())
+
+  // Update slidesPerView on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setSlidesPerView(getSlidesPerView())
+    }
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const maxSlide = Math.max(0, awards.length - slidesPerView)
 
-  // Auto-play functionality
+  // Auto-play
   useEffect(() => {
     if (isAutoPlay) {
       const interval = setInterval(() => {
-        setCurrentSlide((prev) => {
-          if (prev >= maxSlide) {
-            return 0 // Reset to beginning
-          }
-          return prev + 1
-        })
-      }, 3000) // Change every 3 seconds
+        setCurrentSlide((prev) => (prev >= maxSlide ? 0 : prev + 1))
+      }, 4000)
 
       return () => clearInterval(interval)
     }
   }, [isAutoPlay, maxSlide])
 
-  // Handle manual navigation
+  // Manual navigation
   const handlePrevious = () => {
     setIsAutoPlay(false)
     setCurrentSlide((prev) => (prev > 0 ? prev - 1 : maxSlide))
-    
-    // Resume auto-play after 8 seconds
-    setTimeout(() => setIsAutoPlay(true), 8000)
+    setTimeout(() => setIsAutoPlay(true), 6000)
   }
 
   const handleNext = () => {
     setIsAutoPlay(false)
     setCurrentSlide((prev) => (prev < maxSlide ? prev + 1 : 0))
-    
-    // Resume auto-play after 8 seconds
-    setTimeout(() => setIsAutoPlay(true), 8000)
+    setTimeout(() => setIsAutoPlay(true), 6000)
   }
 
-  // Handle touch/drag
-  const [isDragging, setIsDragging] = useState(false)
-  const [dragStartX, setDragStartX] = useState(0)
-  const [dragCurrentX, setDragCurrentX] = useState(0)
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true)
-    setIsAutoPlay(false)
+  // Touch swipe
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setDragStartX(e.touches[0].clientX)
+    setIsAutoPlay(false)
   }
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return
-    setDragCurrentX(e.touches[0].clientX)
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    setDragEndX(e.touches[0].clientX)
   }
 
   const handleTouchEnd = () => {
-    if (!isDragging) return
-    setIsDragging(false)
-    
-    const dragDistance = dragStartX - dragCurrentX
-    const threshold = 100 // Minimum drag distance to trigger slide change
-    
+    const dragDistance = dragStartX - dragEndX
+    const threshold = 50
     if (Math.abs(dragDistance) > threshold) {
       if (dragDistance > 0 && currentSlide < maxSlide) {
-        setCurrentSlide(prev => prev + 1)
+        setCurrentSlide((prev) => prev + 1)
       } else if (dragDistance < 0 && currentSlide > 0) {
-        setCurrentSlide(prev => prev - 1)
+        setCurrentSlide((prev) => prev - 1)
       }
     }
-    
-    // Resume auto-play after 8 seconds
-    setTimeout(() => setIsAutoPlay(true), 8000)
+    setTimeout(() => setIsAutoPlay(true), 6000)
   }
 
   return (
-    <section className="relative py-20 overflow-hidden max-w-7xl mx-auto">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/it-consultancy-professionals.jpg"
-          alt="Technology Background"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-800/85 to-slate-900/90"></div>
-        
-        {/* Geometric Decorations */}
-        <div className="absolute top-10 left-10 opacity-20">
-          <div className="grid grid-cols-4 gap-2">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className={`w-4 h-4 border-2 border-blue-400 ${i % 3 === 0 ? 'bg-blue-400' : ''}`}></div>
-            ))}
-          </div>
+    <section className="bg-gradient-to-br from-black via-purple-950 to-blue-950 relative overflow-hidden">
+      <div className="relative py-12 sm:py-16 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+        <div className="absolute inset-0 -z-10">
+          <img
+            src="/it-consultancy-professionals.jpg"
+            alt="Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 to-slate-800/90"></div>
         </div>
-        
-        <div className="absolute top-20 right-20 opacity-20">
-          <div className="grid grid-cols-3 gap-3">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="w-6 h-6 border-2 border-blue-400"></div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="absolute bottom-20 left-20 opacity-20">
-          <div className="grid grid-cols-3 gap-2">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="w-3 h-3 bg-blue-500"></div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="flex space-x-1">
-              <div className="w-8 h-1 bg-blue-500"></div>
-              <div className="w-4 h-1 bg-blue-400"></div>
-            </div>
-            <span className="text-blue-400 font-semibold uppercase tracking-wider">Awards</span>
-            <div className="flex space-x-1">
-              <div className="w-4 h-1 bg-blue-400"></div>
-              <div className="w-8 h-1 bg-blue-500"></div>
-            </div>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">
-            We are very proud of our
+        <div className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
+            Our Online Ventures
           </h2>
-          <h2 className="text-4xl md:text-5xl font-bold mb-8">
-            Best <span className="text-blue-400">Achievements</span>
-          </h2>
+          <p className="text-gray-300 text-sm sm:text-base md:text-lg">
+            Innovating across multiple domains
+          </p>
         </div>
 
-        {/* Awards Swiper */}
+        {/* Slider */}
         <div className="relative">
-          {/* Navigation Buttons */}
+          {/* Buttons */}
           <button
             onClick={handlePrevious}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+            className="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 backdrop-blur rounded-full flex items-center justify-center text-white transition hover:scale-110"
+            aria-label="Previous slide"
           >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          
-          <button
-            onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
-          >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
-          {/* Swiper Container */}
+          <button
+            onClick={handleNext}
+            className="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 backdrop-blur rounded-full flex items-center justify-center text-white transition hover:scale-110"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Cards */}
           <div
-            className="overflow-hidden mx-12"
+            className="overflow-x-hidden mx-4 sm:mx-8 md:mx-12"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
             <div
               className="flex transition-transform duration-500 ease-out"
-              style={{
-                transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
-              }}
+              style={{ transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)` }}
             >
-              {awards.map((award, index) => (
+              {awards.map((award) => (
                 <div
                   key={award.id}
-                  className="flex-shrink-0 px-3"
+                  className="flex-shrink-0 px-2 sm:px-3 md:px-4"
                   style={{ width: `${100 / slidesPerView}%` }}
                 >
-                  <div className="bg-white rounded-2xl p-8 shadow-2xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 group">
-                    <div className="flex flex-col items-center text-center">
-                      {/* Award Badge */}
-                      <div className={`w-24 h-24 ${award.bgColor} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                        <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center">
-                          <div className="text-2xl font-bold text-gray-800">🏆</div>
-                        </div>
-                      </div>
-                      
-                      {/* Award Content */}
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                  <div className="relative bg-gradient-to-br from-slate-800/80 to-blue-900/80 backdrop-blur-lg border border-white/20 rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl group hover:scale-105 hover:-translate-y-2 transition-all duration-500">
+                    {/* Glow effect */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 blur-2xl transition"></div>
+
+                    <div className="relative flex flex-col items-center text-center">
+                      <img
+                        src={award.image}
+                        alt={award.title}
+                        className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain mb-3 sm:mb-4 drop-shadow-lg"
+                      />
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2">
                         {award.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {award.category}
-                      </p>
-                      
-                      {/* Award Year/Status */}
-                      <div className="w-full h-1 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div>
+                      <a
+                        href={`https://${award.link}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 text-sm sm:text-base hover:underline"
+                      >
+                        {award.link}
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -248,26 +211,25 @@ export default function AwardsAchievements() {
             </div>
           </div>
 
-          {/* Dots Indicator */}
-          <div className="flex justify-center space-x-2 mt-8">
+          {/* Dots */}
+          <div className="flex justify-center space-x-2 mt-6 sm:mt-8">
             {[...Array(maxSlide + 1)].map((_, index) => (
               <button
                 key={index}
                 onClick={() => {
                   setCurrentSlide(index)
                   setIsAutoPlay(false)
-                  setTimeout(() => setIsAutoPlay(true), 8000)
+                  setTimeout(() => setIsAutoPlay(true), 6000)
                 }}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  currentSlide === index
-                    ? 'bg-blue-500 scale-125'
-                    : 'bg-white/30 hover:bg-white/50'
-                }`}
+                className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${currentSlide === index
+                    ? "bg-blue-500 scale-125"
+                    : "bg-white/30 hover:bg-white/50"
+                  }`}
+                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
-        </div>
-      </div>
+        </div></div>
     </section>
   )
 }

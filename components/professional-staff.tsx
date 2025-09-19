@@ -1,366 +1,515 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Play, Shield, Zap, Database, Target, Sparkles, ChevronRight } from "lucide-react"
-import { useState, useEffect } from "react"
-import Image from "next/image"
+import { useState, useEffect, useRef } from "react";
+import {
+  ArrowRight,
+  Play,
+  Shield,
+  Zap,
+  Database,
+  Target,
+  Sparkles,
+  ChevronRight,
+  Briefcase,
+  Users,
+  Star,
+  CheckCircle,
+  Rocket,
+} from "lucide-react";
 
-// Define TypeScript interfaces
 interface Slide {
-  image: string
-  category: string
-  title: string
-  description: string
-  bgColor: string
-  accentColor: string
-  stats: { number: string; label: string }
+  image: string;
+  category: string;
+  title: string;
+  description: string;
+  bgColor: string;
+  accentColor: string;
+  stats: { number: string; label: string };
 }
 
 interface Service {
-  title: string
-  description: string
-  icon: JSX.Element
-  color: string
+  title: string;
+  description: string;
+  icon: JSX.Element;
+  color: string;
+  gradient: string;
 }
 
-interface RightSideContent {
-  title: string
-  subtitle: string
-  description: string
-  services: Service[]
+interface Achievement {
+  number: string;
+  label: string;
+  icon: JSX.Element;
+  color: string;
 }
 
 interface MousePosition {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
-export default function ProfessionalStaff() {
-  const [activeSlide, setActiveSlide] = useState<number>(0)
-  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true)
-  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 })
-  const [isVisible, setIsVisible] = useState<boolean>(false)
+export default function PayzonIndiaHero() {
+  const [activeSlide, setActiveSlide] = useState<number>(0);
+  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true);
+  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [activeService, setActiveService] = useState<number>(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  // Slide data
   const slides: Slide[] = [
     {
-      image: "/business-consulting-meeting.png",
-      category: "Case Studies",
-      title: "Information Security Excellence",
-      description: "Advanced cybersecurity solutions protecting Fortune 500 companies with 99.9% threat detection accuracy.",
-      bgColor: "from-emerald-900/80 via-teal-900/60",
+      image:
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop",
+      category: "Digital Excellence",
+      title: "Revolutionary Digital Marketing Solutions",
+      description:
+        "Transforming businesses with cutting-edge digital strategies, web development, and comprehensive online presence management.",
+      bgColor: "from-emerald-900/90 via-teal-900/70",
       accentColor: "emerald",
-      stats: { number: "500+", label: "Secured Systems" },
+      stats: { number: "500+", label: "Success Stories" },
     },
     {
-      image: "/firewall-security-technology.jpg",
-      category: "Our Services",
-      title: "AI-Powered Cybersecurity",
-      description: "Next-generation threat detection using machine learning algorithms to predict and prevent cyber attacks.",
-      bgColor: "from-blue-900/80 via-indigo-900/60",
+      image:
+        "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop",
+      category: "Banking & Finance",
+      title: "NISM & IRDA Certification Program",
+      description:
+        "Accelerate your banking career with our comprehensive training program, earning industry-recognized certifications.",
+      bgColor: "from-violet-900/90 via-purple-900/70",
+      accentColor: "violet",
+      stats: { number: "1000+", label: "Certified Professionals" },
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
+      category: "Web Development",
+      title: "Next-Gen Web Solutions",
+      description:
+        "Creating responsive, scalable websites that deliver exceptional user experiences and drive business growth.",
+      bgColor: "from-blue-900/90 via-indigo-900/70",
       accentColor: "blue",
-      stats: { number: "24/7", label: "Monitoring" },
+      stats: { number: "99.9%", label: "Client Satisfaction" },
     },
     {
-      image: "/internal-networking-infrastructure.jpg",
-      category: "Technology",
-      title: "Cloud Infrastructure Mastery",
-      description: "Scalable cloud solutions powered by cutting-edge infrastructure that adapts to your business growth.",
-      bgColor: "from-purple-900/80 via-violet-900/60",
-      accentColor: "purple",
-      stats: { number: "99.9%", label: "Uptime" },
+      image:
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
+      category: "Data Protection",
+      title: "Advanced Security Solutions",
+      description:
+        "Comprehensive data protection services safeguarding sensitive business information with industry-leading security protocols.",
+      bgColor: "from-orange-900/90 via-red-900/70",
+      accentColor: "orange",
+      stats: { number: "24/7", label: "Security Monitoring" },
     },
-  ]
+  ];
 
-  // Right side content
-  const rightSideContent: RightSideContent = {
-    title: "Our penetration testing team uses industry-leading methodologies",
-    subtitle: "Who We Are?",
-    description: "We provide comprehensive IT solutions and cybersecurity consulting across multiple industries, delivering innovation at every step.",
-    services: [
-      {
-        title: "Digital Security Expert",
-        description: "Advanced threat intelligence and real-time monitoring to protect your digital assets from sophisticated cyber attacks.",
-        icon: <Shield className="w-6 h-6" />,
-        color: "from-blue-500 to-cyan-500",
-      },
-      {
-        title: "Cloud Infrastructure Specialist",
-        description: "Scalable cloud solutions with automated deployment and intelligent resource optimization for maximum efficiency.",
-        icon: <Database className="w-6 h-6" />,
-        color: "from-purple-500 to-pink-500",
-      },
-      // {
-      //   title: "AI Solutions Architect",
-      //   description: "Machine learning powered automation and intelligent systems that transform how your business operates.",
-      //   icon: <Zap className="w-6 h-6" />,
-      //   color: "from-orange-500 to-red-500",
-      // },
-      // {
-      //   title: "Penetration Testing Lead",
-      //   description: "Comprehensive security assessments and vulnerability testing to ensure your systems are impenetrable.",
-      //   icon: <Target className="w-6 h-6" />,
-      //   color: "from-green-500 to-emerald-500",
-      // },
-    ],
-  }
+  const services: Service[] = [
+    {
+      title: "Innovative Development",
+      description:
+        "Crafting innovative software solutions that empower businesses to streamline operations and enhance productivity.",
+      icon: <Zap className="w-6 h-6 md:w-7 md:h-7" />,
+      color: "from-pink-500 to-rose-500",
+      gradient: "from-pink-50 to-rose-50",
+    },
+    {
+      title: "Project Management",
+      description:
+        "Efficient project management services ensuring timely delivery and successful implementation of IT solutions.",
+      icon: <Database className="w-6 h-6 md:w-7 md:h-7" />,
+      color: "from-green-500 to-lime-500",
+      gradient: "from-green-50 to-lime-50",
+    },
+    {
+      title: "Support & Services",
+      description:
+        "Dedicated and fast support services to ensure your systems run smoothly with future-ready enhancements.",
+      icon: <CheckCircle className="w-6 h-6 md:w-7 md:h-7" />,
+      color: "from-yellow-500 to-amber-500",
+      gradient: "from-yellow-50 to-amber-50",
+    },
+  ];
 
-  // Handle mouse movement
+  const achievements: Achievement[] = [
+    {
+      number: "500+",
+      label: "Projects Completed",
+      icon: <Briefcase className="w-5 h-5 md:w-6 md:h-6" />,
+      color: "from-emerald-500 to-teal-500",
+    },
+    {
+      number: "1000+",
+      label: "Certified Professionals",
+      icon: <Users className="w-5 h-5 md:w-6 md:h-6" />,
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      number: "99.9%",
+      label: "Client Satisfaction",
+      icon: <Star className="w-5 h-5 md:w-6 md:h-6" />,
+      color: "from-violet-500 to-purple-500",
+    },
+    {
+      number: "24/7",
+      label: "Support Available",
+      icon: <Target className="w-5 h-5 md:w-6 md:h-6" />,
+      color: "from-orange-500 to-red-500",
+    },
+  ];
+
+  // Mouse movement handling (disabled on touch devices)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      })
+    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (!isTouchDevice) {
+      let timeoutId: NodeJS.Timeout;
+      const handleMouseMove = (e: MouseEvent) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setMousePosition({
+            x: (e.clientX / window.innerWidth) * 100,
+            y: (e.clientY / window.innerHeight) * 100,
+          });
+        }, 16);
+      };
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => {
+        clearTimeout(timeoutId);
+        window.removeEventListener("mousemove", handleMouseMove);
+      };
     }
-    window.addEventListener("mousemove", handleMouseMove)
-    setIsVisible(true)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+  }, []);
 
-  // Auto-slide
+  // IntersectionObserver for visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  // Auto-slide functionality
   useEffect(() => {
     if (isAutoPlay) {
       const interval = setInterval(() => {
-        setActiveSlide((prevSlide) => (prevSlide + 1) % slides.length)
-      }, 5000)
-      return () => clearInterval(interval)
+        setActiveSlide((prevSlide) => (prevSlide + 1) % slides.length);
+      }, 4000);
+      return () => clearInterval(interval);
     }
-  }, [isAutoPlay, slides.length])
+  }, [isAutoPlay, slides.length]);
+
+  // Auto-rotate services
+  useEffect(() => {
+    const serviceInterval = setInterval(() => {
+      setActiveService((prev) => (prev + 1) % services.length);
+    }, 3000);
+    return () => clearInterval(serviceInterval);
+  }, [services.length]);
+
+  // Swipe support for carousel
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart !== null && touchEnd !== null) {
+      const distance = touchStart - touchEnd;
+      const isSwipe = Math.abs(distance) > 50; // Minimum swipe distance
+      if (isSwipe) {
+        setIsAutoPlay(false);
+        if (distance > 0) {
+          setActiveSlide((prev) => (prev + 1) % slides.length); // Swipe left
+        } else {
+          setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length); // Swipe right
+        }
+        setTimeout(() => setIsAutoPlay(true), 10000);
+      }
+    }
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
 
   const handleDotClick = (index: number) => {
-    setActiveSlide(index)
-    setIsAutoPlay(false)
-    setTimeout(() => setIsAutoPlay(true), 15000)
-  }
-
-  // Handle button click in stats badge
-  const handleStatsButtonClick = () => {
-    // Add navigation or action here, e.g., open a case study or modal
-    console.log("Stats button clicked for slide:", slides[activeSlide].title)
-  }
+    setActiveSlide(index);
+    setIsAutoPlay(false);
+    setTimeout(() => setIsAutoPlay(true), 10000);
+  };
 
   return (
-    <section className="min-h-screen py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden">
-      {/* Dynamic Mesh Gradient Background */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          background: `
-            radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at ${100 - mousePosition.x}% ${100 - mousePosition.y}%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
-            linear-gradient(135deg, 
-              rgba(236, 72, 153, 0.05) 0%, 
-              rgba(59, 130, 246, 0.05) 25%, 
-              rgba(16, 185, 129, 0.05) 50%, 
-              rgba(245, 101, 101, 0.05) 75%, 
-              rgba(139, 92, 246, 0.05) 100%
-            )
-          `,
-        }}
-      />
-
-      {/* Animated Grid Pattern */}
+    <section
+      ref={sectionRef}
+      className="min-h-screen py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden bg-slate-900"
+    >
+      {/* Animated Background (simplified for mobile) */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:30px_30px] sm:bg-[size:40px_40px] md:bg-[size:50px_50px] lg:bg-[size:60px_60px] animate-pulse"></div>
+        <div
+          className="absolute inset-0 opacity-40 transition-all duration-500 hidden md:block"
+          style={{
+            background: `
+              radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(16, 185, 129, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at ${100 - mousePosition.x}% ${100 - mousePosition.y}%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+              conic-gradient(from 0deg at 50% 50%, 
+                rgba(16, 185, 129, 0.1) 0deg,
+                rgba(59, 130, 246, 0.1) 90deg,
+                rgba(139, 92, 246, 0.1) 180deg,
+                rgba(236, 72, 153, 0.1) 270deg,
+                rgba(16, 185, 129, 0.1) 360deg
+              )
+            `,
+          }}
+        />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-float hidden md:block"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 4}s`,
+              }}
+            >
+              <div
+                className="w-2 h-2 md:w-3 md:h-3 rounded-full blur-sm opacity-50"
+                style={{
+                  background: [
+                    "#10B981",
+                    "#3B82F6",
+                    "#8B5CF6",
+                    "#EC4899",
+                    "#F59E0B",
+                  ][Math.floor(Math.random() * 5)],
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.05)_1px,transparent_1px)] bg-[size:40px_40px] md:bg-[size:60px_60px] animate-pulse" />
       </div>
 
-      {/* Floating Geometric Shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              backgroundColor: ["#3B82F6", "#8B5CF6", "#10B981", "#F59E0B"][Math.floor(Math.random() * 4)],
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
-          {/* Left Side - Enhanced Image Section */}
-          <div
-            className={`relative transform transition-all duration-1000 ${
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-            }`}
-          >
-            {/* Main Image Container with Advanced Effects */}
-            <div className="relative group">
-              {/* <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-all duration-700"></div> */}
-
-              <div className="relative overflow-hidden rounded-3xl border border-white/20 backdrop-blur-sm">
-                <Image
-                  src={slides[activeSlide].image}
-                  alt={slides[activeSlide].title}
-                  width={800}
-                  height={600}
-                  className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover transition-all duration-700 group-hover:scale-110"
-                  priority={activeSlide === 0} // Optimize first slide
-                />
-
-                {/* Dynamic Overlay with Gradient */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t ${slides[activeSlide].bgColor} to-transparent opacity-50 transition-all duration-700 z-10`}
-                ></div>
-
-                {/* Animated Border */}
-                <div
-                  className="absolute inset-0 rounded-3xl border-2 border-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-all duration-500"
-                  style={{
-                    background: "linear-gradient(white, white) padding-box, linear-gradient(45deg, #3B82F6, #8B5CF6, #EC4899) border-box",
-                  }}
-                ></div>
-
-                {/* Enhanced Content Overlay */}
-                <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 right-4 sm:right-6 md:right-8 text-white z-20">
-                  <div className="flex items-center space-x-2 sm:space-x-3 text-blue-300 text-xs sm:text-sm font-semibold mb-2 sm:mb-3">
-                    <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                    <span>{slides[activeSlide].category}</span>
-                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </div>
-
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3 md:mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                    {slides[activeSlide].title}
-                  </h3>
-
-                  <p className="text-sm sm:text-base md:text-gray-200 mb-3 sm:mb-4 md:mb-6 max-w-md leading-relaxed">
-                    {slides[activeSlide].description}
-                  </p>
-
-                  {/* Stats Badge */}
-                  <div className="inline-flex items-center space-x-3 sm:space-x-4 bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl px-4 sm:px-6 py-2 sm:py-3 border border-white/20">
-                    <div className="text-center">
-                      <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">{slides[activeSlide].stats.number}</div>
-                      <div className="text-xs text-gray-300">{slides[activeSlide].stats.label}</div>
-                    </div>
-                    <Button
-                      size="icon"
-                      className="rounded-full bg-white/20 hover:bg-white/30 text-white border-none w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 backdrop-blur-sm"
-                      onClick={handleStatsButtonClick}
-                    >
-                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Enhanced Navigation Panel */}
-            <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 md:-bottom-8 md:-right-8 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 shadow-2xl border border-white/20 backdrop-blur-sm z-20">
-              <div className="flex flex-col items-center space-y-4 sm:space-y-5 md:space-y-6">
-                {/* Play Button with Pulse Effect */}
-                <div className="relative">
-                  <button
-                    onClick={() => setIsAutoPlay(!isAutoPlay)}
-                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center animate-pulse"
-                  >
-                    <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5 sm:ml-1 text-blue-600" fill="currentColor" />
-                  </button>
-                  <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-25"></div>
-                </div>
-
-                {/* Enhanced Navigation Dots */}
-                <div className="flex flex-col space-y-3 sm:space-y-4">
-                  {slides.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleDotClick(index)}
-                      className={`relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-500 cursor-pointer group ${
-                        activeSlide === index
-                          ? "bg-white text-blue-600 shadow-2xl scale-125"
-                          : "bg-white/20 text-white hover:bg-white/40 hover:scale-110"
-                      }`}
-                    >
-                      <span className="relative z-10">{index + 1}</span>
-                      {activeSlide === index && (
-                        <div
-                          className="absolute inset-0 bg-white rounded-full animate-spin"
-                          style={{
-                            background: "conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.3), transparent)",
-                          }}
-                        ></div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Side - Enhanced Content */}
-          <div
-            className={`space-y-6 sm:space-y-7 md:space-y-8 transform transition-all duration-1000 delay-300 ${
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-            }`}
-          >
-            {/* Header Section */}
-            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="space-y-8 md:space-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-8 md:pb-12">
+            <div>
               <div className="flex items-center space-x-2 sm:space-x-3">
-                <div className="flex items-center space-x-1 sm:space-x-2 text-blue-600 text-xs sm:text-sm font-semibold">
-                  <div className="w-6 h-0.5 sm:w-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                  <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                  <span>{rightSideContent.subtitle}</span>
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                <div className="w-8 sm:w-12 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full" />
+                <div className="flex items-center space-x-2 text-emerald-400 font-bold text-sm sm:text-base">
+                  <Rocket className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+                  <span>About PayzonIndia</span>
                 </div>
               </div>
-
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                Our{" "}
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
-                  penetration testing
-                </span>{" "}
-                team uses industry-leading methodologies
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mt-4">
+                <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  PayzonIndia
+                </span>
+                <br />
+                <span className="text-slate-300">Excellent IT Services</span>
+                <br />
+                <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                  For Your Success
+                </span>
               </h2>
-
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">{rightSideContent.description}</p>
             </div>
-
-            {/* Enhanced Service Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
-              {rightSideContent.services.map((service, index) => (
-                <div
-                  key={index}
-                  className="group relative bg-white/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer overflow-hidden"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {/* Animated background gradient */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-all duration-500 rounded-xl sm:rounded-2xl`}
-                  ></div>
-
-                  {/* Icon container with enhanced effects */}
-                  <div className="relative z-10 text-center">
-                    <div
-                      className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br ${service.color} rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-500`}
-                    >
-                      <span className="text-white">{service.icon}</span>
-                    </div>
-
-                    <h4 className="font-bold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg md:text-lg group-hover:text-blue-600 transition-colors duration-300">
-                      {service.title}
-                    </h4>
-
-                    <p className="text-xs sm:text-sm md:text-sm text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  {/* Hover border effect */}
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl border-2 border-transparent group-hover:border-blue-500 transition-all duration-500"></div>
-                </div>
-              ))}
+            <div>
+              <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed">
+                We are a dynamic software company specializing in innovative, scalable solutions that empower businesses to streamline operations, enhance productivity, and drive digital transformation. Our expertise spans:
+                <ul className="list-disc pl-5 sm:pl-6 mt-2 space-y-1 sm:space-y-2">
+                  <li className="text-sm sm:text-base">Following the latest technology standards for cutting-edge solutions.</li>
+                  <li className="text-sm sm:text-base">Believing in secure and simple development practices.</li>
+                  <li className="text-sm sm:text-base">Providing dedicated and fast support for seamless operations.</li>
+                  <li className="text-sm sm:text-base">Always ready for future enhancements to keep you ahead.</li>
+                </ul>
+              </p>
+              <button className="px-4 sm:px-6 mt-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-500 to-blue-500 text-white rounded-full font-bold text-sm sm:text-base hover:scale-105 transition-transform duration-300 ease-out">
+                Get Started with PayzonIndia
+              </button>
             </div>
-
-           
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-12 items-start">
+            {/* Image Carousel */}
+            <div
+              className={`lg:col-span-7 transform transition-all duration-1000 ease-out ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              <div className="relative group">
+                <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border-2 border-gradient-to-r from-emerald-500/50 via-blue-500/50 to-purple-500/50">
+                  <img
+                    src={slides[activeSlide].image}
+                    alt={slides[activeSlide].title}
+                    className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover transition-transform duration-1000 ease-in-out group-hover:scale-105"
+                    loading="lazy"
+                    srcSet={`
+                      ${slides[activeSlide].image}&w=400 400w,
+                      ${slides[activeSlide].image}&w=800 800w,
+                      ${slides[activeSlide].image}&w=1200 1200w
+                    `}
+                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
+                  />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t ${slides[activeSlide].bgColor} to-transparent opacity-70 transition-opacity duration-500`}
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white z-20 bg-gradient-to-t from-black/60 to-transparent">
+                    <div className="inline-flex items-center space-x-2 bg-emerald-500/20 backdrop-blur-md rounded-full px-3 sm:px-4 py-1 sm:py-2 border border-emerald-400/30 mb-3 sm:mb-4">
+                      <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse text-emerald-400" />
+                      <span className="text-xs sm:text-sm font-bold text-emerald-300">
+                        {slides[activeSlide].category}
+                      </span>
+                      <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
+                    </div>
+                    <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 bg-gradient-to-r from-white via-emerald-200 to-blue-200 bg-clip-text text-transparent">
+                      {slides[activeSlide].title}
+                    </h3>
+                    <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-4 sm:mb-6 max-w-md leading-relaxed">
+                      {slides[activeSlide].description}
+                    </p>
+                    <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-3 sm:px-4 py-1 sm:py-2">
+                      <span className="text-lg sm:text-xl md:text-2xl font-black text-emerald-300">
+                        {slides[activeSlide].stats.number}
+                      </span>
+                      <span className="text-xs sm:text-sm text-gray-300">
+                        {slides[activeSlide].stats.label}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute -bottom-6 right-4 sm:-bottom-8 sm:-right-8 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border border-emerald-400/30 backdrop-blur-xl z-30">
+                  <div className="flex flex-row sm:flex-col items-center space-x-4 sm:space-x-0 sm:space-y-4">
+                    <div className="relative">
+                      <button
+                        onClick={() => setIsAutoPlay(!isAutoPlay)}
+                        className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-xl sm:rounded-2xl flex items-center justify-center hover:scale-105 transition-transform duration-300 ease-out hover:shadow-2xl hover:shadow-emerald-500/50"
+                        aria-label={isAutoPlay ? "Pause carousel" : "Play carousel"}
+                      >
+                        <Play
+                          className={`w-5 h-5 sm:w-6 sm:h-6 text-white ml-1 transition-opacity duration-300 ${!isAutoPlay ? "opacity-50" : ""}`}
+                          fill="currentColor"
+                        />
+                      </button>
+                      {isAutoPlay && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-xl sm:rounded-2xl animate-ping opacity-20" />
+                      )}
+                    </div>
+                    <div className="flex space-x-2 sm:space-x-0 sm:flex-col sm:space-y-4">
+                      {slides.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleDotClick(index)}
+                          className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-xs sm:text-sm font-black transition-all duration-300 ease-out ${activeSlide === index
+                            ? "bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-2xl scale-110 shadow-emerald-500/50"
+                            : "bg-slate-700 text-slate-400 hover:bg-slate-600 hover:scale-105"
+                          }`}
+                          aria-label={`Go to slide ${index + 1}`}
+                        >
+                          <span className="relative z-10">{index + 1}</span>
+                          {activeSlide === index && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg sm:rounded-xl animate-pulse opacity-40" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Services Grid */}
+            <div
+              className={`lg:col-span-5 space-y-6 transform transition-all duration-1000 ease-out delay-300 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+            >
+              <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                {services.map((service, index) => (
+                  <div
+                    key={index}
+                    className={`group relative overflow-hidden rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-500 ease-out cursor-pointer border ${activeService === index
+                      ? "bg-gradient-to-r from-slate-800 to-slate-700 border-emerald-400/50 shadow-2xl shadow-emerald-500/20 scale-102"
+                      : "bg-slate-800/50 border-slate-700/50 hover:border-emerald-400/30"
+                    }`}
+                    onMouseEnter={() => setActiveService(index)}
+                    onClick={() => setActiveService(index)}
+                  >
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 ease-out`}
+                    />
+                    <div className="relative z-10 flex items-start space-x-3 sm:space-x-4">
+                      <div
+                        className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${service.color} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 ease-out`}
+                      >
+                        <span className="text-white">{service.icon}</span>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-black text-lg sm:text-xl text-white mb-2 group-hover:text-emerald-300 transition-colors duration-300">
+                          {service.title}
+                        </h4>
+                        <p className="text-sm sm:text-base text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
+                          {service.description}
+                        </p>
+                      </div>
+                      <ArrowRight
+                        className={`w-5 h-5 sm:w-6 sm:h-6 text-slate-600 group-hover:text-emerald-400 transform group-hover:translate-x-2 transition-all duration-300 ease-out ${activeService === index
+                          ? "text-emerald-400 translate-x-2"
+                          : ""
+                        }`}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
+
+      {/* Custom CSS for Smooth Animations */}
+      <style jsx>{`
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-15px);
+          }
+        }
+        .animate-float {
+          animation: float linear infinite;
+        }
+        img {
+          will-change: transform;
+        }
+        .group:hover img {
+          transform: scale(1.05);
+        }
+        section {
+          scroll-behavior: smooth;
+        }
+        @media (max-width: 640px) {
+          .animate-float {
+            animation-duration: 6s;
+          }
+        }
+      `}</style>
     </section>
-  )
+  );
 }

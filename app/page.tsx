@@ -1,3 +1,4 @@
+"use client"
 import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
 import Services from "@/components/services"
@@ -11,7 +12,11 @@ import Footer from "@/components/footer"
 import ScrollToTop from "@/components/scroll-to-top"
 import ServicesSection from "@/components/service"
 import AwardsAchievements from "@/components/collaboration"
-import { MarqueeDemo } from "@/components/marquee"
+import NewComponent from "@/components/newcomponent"
+import MarqueeDemo from "@/components/marquee"
+import MarketingSection from "@/components/marketing"
+import BusinessShowcase from "@/components/orbite"
+import PayZoneFAQ from "@/components/faq"
 
 export default function Home() {
   return (
@@ -20,13 +25,21 @@ export default function Home() {
       <ServicesSection />
       <About />
       <ProfessionalStaff />
-      <MarqueeDemo />
+
+      <BusinessShowcase />
+
+      <NewComponent />
+      
+      <MarketingSection />
+      
       <AwardsAchievements />
-      <Services />
-      <Stats />
-      <Portfolio />
-      <Team />
-       <Testimonials />
+      <MarqueeDemo />
+      {/* <Services /> */}
+      <PayZoneFAQ />
+      {/* <Stats /> */}
+      {/* <Portfolio /> */}
+      {/* <Team /> */}
+      {/* <Testimonials /> */}
       <ScrollToTop />
     </main>
   )
