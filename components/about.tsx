@@ -130,7 +130,7 @@ export default function About() {
         />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-start">
           {/* Left Content */}
           <div className="space-y-6 sm:space-y-8 order-2 md:order-1">

@@ -111,7 +111,7 @@ export default function NewComponent() {
             {/* Grid pattern overlay */}
             <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Cpath d=%22M0 0h80v80H0z%22 fill=%22none%22/%3E%3Cpath d=%22M0 10h80M0 20h80M0 30h80M0 40h80M0 50h80M0 60h80M0 70h80M10 0v80M20 0v80M30 0v80M40 0v80M50 0v80M60 0v80M70 0v80%22 stroke=%22rgba(255,255,255,0.05)%22/%3E%3C/svg%3E')] opacity-50" />
 
-            <div className="relative z-10 min-h-screen flex flex-col lg:flex-row justify-between items-center p-4 sm:p-6 md:p-8">
+            <div className="relative z-10 min-h-screen  flex flex-col lg:flex-row justify-between items-center p-4 sm:p-6 md:py-12 md:px-12">
                 {/* Left Section - Enhanced Text Content */}
                 <motion.div
                     className="w-full lg:w-1/2 p-4 sm:p-6 md:p-8 flex flex-col justify-center space-y-6"

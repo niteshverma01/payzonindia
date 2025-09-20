@@ -161,7 +161,7 @@ const BusinessShowcase: React.FC = () => {
                 style={{ left: mousePosition.x - 96, top: mousePosition.y - 96 }}
             />
 
-            <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-20 flex flex-col h-full">
+            <div className="relative z-10  px-4 sm:px-20 py-8 sm:py-20 flex flex-col h-full">
                 {/* Skills Section */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Left Side */}
